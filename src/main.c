@@ -4,6 +4,7 @@
 #include <util/delay.h>
 
 #include "xitoa/xitoa.h"
+#include "rtc/rtc.h"
 
 void USARTInit(uint16_t ubrr_value)
 {
@@ -45,9 +46,10 @@ int main(void)
 	xfunc_out = USARTWriteChar;
 
 	USARTInit(12);
+	rtc_init();
 	while (1) {
 		_delay_ms(25);
-		xprintf(PSTR("nameral: %d\n"), b_messure());
+		xprintf(PSTR("n: %d,t: %u\n"), b_messure(), get_rtc());
 	}
 
 	/*this should be unreachable*/
