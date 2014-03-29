@@ -27,6 +27,8 @@
 	of time.
 */
 
+#include "config.h"
+
 /** void rtc_init(void)
 	\brief initialize rtc
 
@@ -56,8 +58,9 @@ uint16_t get_rtc(void);
 
 	\return 32 bit unsigned value of current rtc value
 */
+#ifdef RTC_32_BIT
 uint32_t get_full_rtc(void);
-
+#endif /* RTC_32_BIT */
 /**
 	\brief it's used to messure time in miliseconds
 
@@ -66,7 +69,11 @@ uint32_t get_full_rtc(void);
 
 	\return 32 bit undigned value of current ms from start timer initialization
 */
+#ifdef RTC_32_BIT
 uint32_t get_rtc_ms(void);
+#else /* RTC_32_BIT */
+uint16_t get_rtc_ms(void);
+#endif /* RTC_32_BIT */
 
 /**
 	\brief it's used to messure time in microseconds
@@ -76,4 +83,36 @@ uint32_t get_rtc_ms(void);
 
 	\return 32 bit undigned value of current ms from start timer initialization
 */
+#ifdef RTC_32_BIT
 uint32_t get_rtc_us(void);
+#else /* RTC_32_BIT */
+uint16_t get_rtc_us(void);
+#endif /* RTC_32_BIT */
+
+/**
+	\brief transform TC1 ticks to miliseconds
+
+	function translate get_rtc and get_full_rtc value in to
+	miliseconds. Is useful if you want to make high resolution
+	time diferrence with very small error.
+
+	\param ticks number of TC1 ticks.
+
+	\return unsigned 32 bit integer in miliseconds
+*/
+#ifdef RTC_32_BIT
+uint32_t ticks2ms(uint32_t);
+#else /* RTC_32_BIT */
+uint16_t ticks2ms(uint16_t);
+#endif /* RTC_32_BIT */
+
+/**
+	\brief transform TC1 ticks to microseconds
+
+	see ticks2ms()
+*/
+#ifdef RTC_32_BIT
+uint32_t ticks2us(uint32_t);
+#else /* RTC_32_BIT */
+uint16_t ticks2us(uint16_t);
+#endif /* RTC_32_BIT */

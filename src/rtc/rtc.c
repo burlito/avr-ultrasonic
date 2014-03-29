@@ -26,8 +26,11 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "config.h"
+#include "rtc.h"
 
+#ifdef RTC_32_BIT
 uint16_t high_bites;
+#endif /* RTC_32_BIT */
 
 void rtc_init(void)
 {
@@ -46,14 +49,19 @@ void rtc_init(void)
 	TCCR1B |= _BV(CS12) | _BV(CS10);
 #endif
 
+#ifdef RTC_32_BIT
 	TIMSK1 |= _BV(TOIE1);
 	high_bites = 0;
+#endif /* RTC_32_BIT */
+
 	/*Timer 1 can be accessed from TCNT1H and TCNT1L */
 }
 
+#ifdef RTC_32_BIT
 ISR(TIMER1_OVF_vect) {
 	high_bites++;
 }
+#endif /* RTC_32_BIT */
 
 uint16_t get_rtc(void)
 {
@@ -76,6 +84,7 @@ uint16_t get_rtc(void)
 	return tmp;
 }
 
+#ifdef RTC_32_BIT
 /* if it's  at least remotelly posible, use get_rtc instead */
 uint32_t get_full_rtc(void)
 {
@@ -104,44 +113,94 @@ uint32_t get_full_rtc(void)
 
 	return ret;
 }
+#endif /* RTC_32_BIT */
 
+#ifdef RTC_MS_RESOLUTION
 /** \todo need to test for marginal vaues like ~(uint32_t)0  */
-uint32_t get_rtc_ms(void)
+#ifdef RTC_32_BIT
+uint32_t ticks2ms(uint32_t ticks)
 {
-	uint64_t tmp;
+	uint64_t tmp = ticks;
+#else /* RTC_32_BIT */
+uint16_t ticks2ms(uint16_t ticks)
+{
+	uint32_t tmp = ticks;
+#endif /* RTC_32_BIT */
 
 #if (F_CPU == 8000000UL) || (F_CPU == 4000000UL) || (F_CPU == 2000000UL) ||    \
 		(F_CPU == 1000000UL)
 #	define QUOT (RTC_PRESCALER/(F_CPU/1000000UL))
-	tmp = get_full_rtc();
 	tmp *= QUOT;
 	tmp /= 1000;
+#ifdef RTC_32_BIT
 	return (uint32_t) tmp;
+#else /* RTC_32_BIT */
+	return (uint16_t) tmp;
+#endif /* RTC_32_BIT */
+
 #	undef QUOT
 #else
-	tmp = get_full_rtc()*1000;
+	tmp *= 1000;
 	tmp *= RTC_PRESCALER;
-
+#ifdef RTC_32_BIT
 	return (uint32_t)(tmp/F_CPU);
-#endif
+#else /* RTC_32_BIT */
+	return (uint16_0t)(tmp/F_CPU);
+#endif /* RTC_32_BIT */
+#endif /* F_CPU type */
 }
 
-uint32_t get_rtc_us(void)
+#ifdef RTC_32_BIT
+uint32_t get_rtc_ms(void)
 {
-	uint64_t tmp;
+	return ticks2ms(get_full_rtc());
+}
+#else /* RTC_32_BIT */
+uint16_t get_rtc_ms(void)
+{
+	return ticks2ms(get_rtc());
+}
+#endif /* RTC_32_BIT */
+#endif /* RTC_MS_RESOLUTION */
+
+#ifdef RTC_US_RESOLUTION
+#ifdef RTC_32_BIT
+uint32_t ticks2us(uint32_t ticks)
+{
+	uint64_t tmp = ticks;
+#else /* RTC_32_BIT */
+uint16_t ticks2us(uint16_t ticks)
+{
+	uint32_t tmp = ticks;
+#endif /* RTC_32_BIT */
 
 #if (F_CPU == 8000000UL) || (F_CPU == 4000000UL) || (F_CPU == 2000000UL) ||    \
 		(F_CPU == 1000000UL)
 #	define QUOT (RTC_PRESCALER/(F_CPU/1000000UL))
-	tmp = get_full_rtc();
 	tmp *= QUOT;
 	return (uint32_t) tmp;
 #	undef QUOT
 #else
-	tmp = get_full_rtc()*1000;
+	tmp *= 1000;
 	tmp *= RTC_PRESCALER;
 
+#ifdef RTC_32_BIT
 	return (uint32_t)(tmp/(F_CPU/1000));
-#endif
+#else /* RTC_32_BIT */
+	return (uint32_t)(tmp/(F_CPU/1000));
+#endif /* RTC_32_BIT */
+#endif /* F_CPU type */
 }
 
+#ifdef RTC_32_BIT
+uint32_t get_rtc_us(void)
+{
+	ticks2us(get_full_rtc());
+}
+#else /* RTC_32_BIT */
+uint16_t get_rtc_us(void)
+{
+	ticks2us(get_rtc());
+}
+#endif /* RTC_32_BIT */
+#endif /* RTC_US_RESOLUTION */

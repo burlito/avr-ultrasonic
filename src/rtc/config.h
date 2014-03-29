@@ -34,7 +34,23 @@
 
 	RTC_PRESCALER will setup RTC prescaling int TC1
 		allowed values are 1, 64, 256, 1024
+
+	Optimization macros:
+		RTC_MS_RESOLUTION if defined library will be
+			compiled with milissecond support
+
+		RTC_US_RESOLUTION if defined library will be
+			compiled with microsecond support
+
+		RTC_32_BIT if defined library will be compiled
+			with 32 bit timer resolution support
+			this will add about 4K (4/5 of all
+			library) flash space.
 */
+
+#define RTC_MS_RESOLUTION
+#define RTC_US_RESOLUTION
+#define RTC_32_BIT
 
 #ifndef F_CPU
 #	define F_CPU 8000000UL
