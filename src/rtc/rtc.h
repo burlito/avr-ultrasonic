@@ -22,6 +22,38 @@
   THE SOFTWARE.
 */
 
+/**
+	this RTC library is made for ATMega328p and uses Timer1 as source
+	of time.
+*/
 
+/** void rtc_init(void)
+	\brief initialize rtc
+
+	rtc_init should be used in the very beginig of your code.
+*/
 void rtc_init(void);
+
+/**
+	\brief will safelly return value of internal T1 counter
+
+	Basically this function will return internal timer
+	register without any changes but you should use this
+	and not use direct copy of TCNT1 register becouse
+	this function will return TCNT1 in thread safe way.
+
+	\return 16 bit unsigned value of current timer counter.
+*/
 uint16_t get_rtc(void);
+
+/**
+	\brief function will return 32 bit value of rtc
+
+	This function will return you full 32 bit value which is
+	internal TCNT1 register plus 16 bit timer overflow counter.
+	This function is way slower than get_rtc() so if there is a
+	way to user get_rtc() instead you should use get_rtc().
+
+	\return 32 bit unsigned value of current rtc value
+*/
+uint32_t get_full_rtc(void);

@@ -32,8 +32,13 @@ void rtc_init(void)
 {
 	/* CS12 & CS10 is 1024 div presaller */
 	TCCR1B |= _BV(CS12) | _BV(CS10);
+	TIMSK1 |= _BV(TOIE1);
 	high_bites = 0;
 	/*Timer 1 can be accessed from TCNT1H and TCNT1L */
+}
+
+ISR(TIMER1_OVF_vect){
+	high_bites++;
 }
 
 uint16_t get_rtc(void)
@@ -57,3 +62,28 @@ uint16_t get_rtc(void)
 	return tmp;
 }
 
+/* if it's  at least remotelly posible, use get_rtc instead */
+uint32_t get_full_rtc(void){
+	uint32_t ret;
+	uint16_t tmp;
+	uint8_t i;
+
+	for (i = 0; i < 4; i++) {
+		ret = high_bites;
+		((uint16_t *)&ret)[1] = high_bites;
+		tmp = get_rtc();
+		((uint16_t *)&ret)[0] = tmp;
+		if (((uint16_t *)&ret)[1] == high_bites)
+			return ret;
+	}
+
+	return 1;
+	/* hopefully this will not be needed */
+	ATOMIC_BLOCK(ATOMIC_FORCEON) {
+		((uint16_t *)&ret)[1] = high_bites;
+		tmp = get_rtc();
+		((uint16_t *)&ret)[0] = tmp;
+	}
+
+	return ret;
+}
