@@ -46,7 +46,7 @@ int main(void)
 
 	USARTInit(12);
 	while (1) {
-		_delay_ms(250);
+		_delay_ms(25);
 		xprintf(PSTR("nameral: %d\n"), b_messure());
 	}
 
