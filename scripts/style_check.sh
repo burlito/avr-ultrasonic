@@ -1,3 +1,3 @@
 #!/bin/bash
 
-perl `dirname $0`/checkpatch.pl --no-tree --terse --file `dirname $0`/../src/*.c
+perl `dirname $0`/checkpatch.pl --no-tree --terse --file `dirname $0`/../src/*.c `dirname $0`/../src/rtc/*.c

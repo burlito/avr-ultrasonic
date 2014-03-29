@@ -2,7 +2,7 @@
 PROJECT = uvsenzor
 
 ### Source files and search directory
-CSRC    = main.c
+CSRC    = main.c rtc/rtc.c
 ASRC    = xitoa/xitoa.S
 VPATH   =
 
@@ -13,7 +13,7 @@ DEVICE  = atmega328p
 OPTIMIZE = s
 
 ### C Standard level (c89, gnu89, c99 or gnu99)
-CSTD = gnu89
+CSTD = gnu99
 
 ### Include dirs, library dirs and definitions
 LIBS	=
@@ -153,4 +153,4 @@ clean:
 	rm -f -r $(OBJDIR) | exit 0
 
 # Include the dependency files.
--include $(shell mkdir $(OBJDIR) $(OBJDIR)/xitoa 2>/dev/null) $(wildcard $(OBJDIR)/*.d)
+-include $(shell mkdir $(OBJDIR) $(OBJDIR)/xitoa $(OBJDIR)/rtc 2>/dev/null) $(wildcard $(OBJDIR)/*.d)
