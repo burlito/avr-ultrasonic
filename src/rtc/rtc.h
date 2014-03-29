@@ -30,13 +30,15 @@
 #include "config.h"
 
 /** void rtc_init(void)
+
 	\brief initialize rtc
 
 	rtc_init should be used in the very beginig of your code.
 */
 void rtc_init(void);
 
-/**
+/** uint16_t get_rtc(void)
+
 	\brief will safelly return value of internal T1 counter
 
 	Basically this function will return internal timer
@@ -48,7 +50,8 @@ void rtc_init(void);
 */
 uint16_t get_rtc(void);
 
-/**
+/** uint32_t get_full_rtc(void)
+
 	\brief function will return 32 bit value of rtc
 
 	This function will return you full 32 bit value which is
@@ -61,7 +64,8 @@ uint16_t get_rtc(void);
 #ifdef RTC_32_BIT
 uint32_t get_full_rtc(void);
 #endif /* RTC_32_BIT */
-/**
+
+/** uint32_t get_rtc_ms(void)
 	\brief it's used to messure time in miliseconds
 
 	Function internally read rtc timer and overflow var and
@@ -75,7 +79,7 @@ uint32_t get_rtc_ms(void);
 uint16_t get_rtc_ms(void);
 #endif /* RTC_32_BIT */
 
-/**
+/** uint32_t get_rtc_us(void)
 	\brief it's used to messure time in microseconds
 
 	Function internally read rtc timer and overflow var and
@@ -89,7 +93,7 @@ uint32_t get_rtc_us(void);
 uint16_t get_rtc_us(void);
 #endif /* RTC_32_BIT */
 
-/**
+/** uint32_t ticks2ms(uint32_t)
 	\brief transform TC1 ticks to miliseconds
 
 	function translate get_rtc and get_full_rtc value in to
@@ -106,7 +110,7 @@ uint32_t ticks2ms(uint32_t);
 uint16_t ticks2ms(uint16_t);
 #endif /* RTC_32_BIT */
 
-/**
+/** uint32_t ticks2us(uint32_t)
 	\brief transform TC1 ticks to microseconds
 
 	see ticks2ms()

@@ -46,6 +46,9 @@
 			with 32 bit timer resolution support
 			this will add about 4K (4/5 of all
 			library) flash space.
+
+		in case you're using RTC_US_RESOLUTION it's
+		highli recommended use RTC_32_BIT too
 */
 
 #define RTC_MS_RESOLUTION
