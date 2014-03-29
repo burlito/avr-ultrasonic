@@ -59,6 +59,8 @@ uint16_t get_rtc(void);
 	This function is way slower than get_rtc() so if there is a
 	way to user get_rtc() instead you should use get_rtc().
 
+	\note this function is availible only if RTC_32_BIT macro is present
+
 	\return 32 bit unsigned value of current rtc value
 */
 #ifdef RTC_32_BIT
@@ -70,6 +72,9 @@ uint32_t get_full_rtc(void);
 
 	Function internally read rtc timer and overflow var and
 	compute time in ms in most sufficient way.
+	
+	\note if RTC_32_BIT macro is not pressent function will change
+		signature to: uint16_t get_rtc_ms(void)
 
 	\return 32 bit undigned value of current ms from start timer initialization
 */
@@ -84,6 +89,9 @@ uint16_t get_rtc_ms(void);
 
 	Function internally read rtc timer and overflow var and
 	compute time in ms in most sufficient way.
+
+	\note if RTC_32_BIT macro is not pressent function will change
+		signature to: uint16_t get_rtc_us(void)
 
 	\return 32 bit undigned value of current ms from start timer initialization
 */
@@ -100,6 +108,9 @@ uint16_t get_rtc_us(void);
 	miliseconds. Is useful if you want to make high resolution
 	time diferrence with very small error.
 
+	\note if RTC_32_BIT macro is not pressent function will change
+		signature to: uint16_t ticks2ms(uint16_t)
+
 	\param ticks number of TC1 ticks.
 
 	\return unsigned 32 bit integer in miliseconds
@@ -112,6 +123,9 @@ uint16_t ticks2ms(uint16_t);
 
 /** uint32_t ticks2us(uint32_t)
 	\brief transform TC1 ticks to microseconds
+
+	\note if RTC_32_BIT macro is not pressent function will change
+		signature to: uint16_t ticks2us(uint16_t)
 
 	see ticks2ms()
 */
