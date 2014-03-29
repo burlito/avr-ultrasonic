@@ -109,6 +109,7 @@ uint32_t get_full_rtc(void)
 	return ret;
 }
 
+/** \todo need to test for marginal vaues like ~(uint32_t)0  */
 uint32_t get_rtc_ms(void)
 {
 	uint64_t tmp;
