@@ -48,8 +48,8 @@ int main(void)
 	USARTInit(12);
 	rtc_init();
 	while (1) {
-		_delay_ms(25);
-		xprintf(PSTR("n: %d,t: %u\n"), b_messure(), get_rtc());
+		/* _delay_ms(25); */
+		xprintf(PSTR("n: %d,t: %lu\n"), b_messure(), get_rtc_ms());
 	}
 
 	/*this should be unreachable*/

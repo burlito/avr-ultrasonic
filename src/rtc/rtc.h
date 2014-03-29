@@ -57,3 +57,23 @@ uint16_t get_rtc(void);
 	\return 32 bit unsigned value of current rtc value
 */
 uint32_t get_full_rtc(void);
+
+/**
+	\brief it's used to messure time in miliseconds
+
+	Function internally read rtc timer and overflow var and
+	compute time in ms in most sufficient way.
+
+	\return 32 bit undigned value of current ms from start timer initialization
+*/
+uint32_t get_rtc_ms(void);
+
+/**
+	\brief it's used to messure time in microseconds
+
+	Function internally read rtc timer and overflow var and
+	compute time in ms in most sufficient way.
+
+	\return 32 bit undigned value of current ms from start timer initialization
+*/
+uint32_t get_rtc_us(void);

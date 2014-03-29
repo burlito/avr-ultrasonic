@@ -26,12 +26,30 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#ifndef F_CPU
+#	define F_CPU 8000000UL
+#endif
+#define RTC_PRESCALER 1024
+
 uint16_t high_bites;
 
 void rtc_init(void)
 {
-	/* CS12 & CS10 is 1024 div presaller */
+#if RTC_PRESCALER == 1
+	TCCR1B |= _BV(CS10);
+#elif RTC_PRESCALER == 8
+	TCCR1B |= _BV(CS11);
+#elif RTC_PRESCALER == 64
+	TCCR1B |= _BV(CS10) | _BV(CS11);
+#elif RTC_PRESCALER == 256
+	TCCR1B |= _BV(CS12);
+#elif RTC_PRESCALER == 1024
 	TCCR1B |= _BV(CS12) | _BV(CS10);
+#else /* default is 1024 div prescaler */
+#	define RTC_PRESCALER 1024
+	TCCR1B |= _BV(CS12) | _BV(CS10);
+#endif
+
 	TIMSK1 |= _BV(TOIE1);
 	high_bites = 0;
 	/*Timer 1 can be accessed from TCNT1H and TCNT1L */
@@ -63,7 +81,8 @@ uint16_t get_rtc(void)
 }
 
 /* if it's  at least remotelly posible, use get_rtc instead */
-uint32_t get_full_rtc(void){
+uint32_t get_full_rtc(void)
+{
 	uint32_t ret;
 	uint16_t tmp;
 	uint8_t i;
@@ -89,3 +108,43 @@ uint32_t get_full_rtc(void){
 
 	return ret;
 }
+
+uint32_t get_rtc_ms(void)
+{
+	uint64_t tmp;
+
+#if (F_CPU == 8000000UL) || (F_CPU == 4000000UL) || (F_CPU == 2000000UL) ||    \
+		(F_CPU == 1000000UL)
+#	define QUOT (RTC_PRESCALER/(F_CPU/1000000UL))
+	tmp = get_full_rtc();
+	tmp *= QUOT;
+	tmp /= 1000;
+	return (uint32_t) tmp;
+#	undef QUOT
+#else
+	tmp = get_full_rtc()*1000;
+	tmp *= RTC_PRESCALER;
+
+	return (uint32_t)(tmp/F_CPU);
+#endif
+}
+
+uint32_t get_rtc_us(void)
+{
+	uint64_t tmp;
+
+#if (F_CPU == 8000000UL) || (F_CPU == 4000000UL) || (F_CPU == 2000000UL) ||    \
+		(F_CPU == 1000000UL)
+#	define QUOT (RTC_PRESCALER/(F_CPU/1000000UL))
+	tmp = get_full_rtc();
+	tmp *= QUOT;
+	return (uint32_t) tmp;
+#	undef QUOT
+#else
+	tmp = get_full_rtc()*1000;
+	tmp *= RTC_PRESCALER;
+
+	return (uint32_t)(tmp/(F_CPU/1000));
+#endif
+}
+
