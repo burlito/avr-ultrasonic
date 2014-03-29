@@ -25,11 +25,7 @@
 #include <util/atomic.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
-#ifndef F_CPU
-#	define F_CPU 8000000UL
-#endif
-#define RTC_PRESCALER 1024
+#include "config.h"
 
 uint16_t high_bites;
 
