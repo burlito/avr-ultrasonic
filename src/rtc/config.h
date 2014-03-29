@@ -24,6 +24,7 @@
 
 #ifndef _RTC_CONFIG_H
 #define _RTC_CONFIG_H
+
 /*
 	this is place for define or include
 	definition of F_CPU and RTC_PRESCALER 
