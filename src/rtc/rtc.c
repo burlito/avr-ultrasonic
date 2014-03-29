@@ -37,7 +37,7 @@ void rtc_init(void)
 	/*Timer 1 can be accessed from TCNT1H and TCNT1L */
 }
 
-ISR(TIMER1_OVF_vect){
+ISR(TIMER1_OVF_vect) {
 	high_bites++;
 }
 
@@ -72,7 +72,8 @@ uint32_t get_full_rtc(void){
 		ret = high_bites;
 		((uint16_t *)&ret)[1] = high_bites;
 		tmp = get_rtc();
-		((uint16_t *)&ret)[0] = tmp;
+		((uint8_t *)&ret)[0] = (uint8_t)tmp;
+		((uint8_t *)&ret)[1] = ((uint8_t *)&tmp)[1];
 		if (((uint16_t *)&ret)[1] == high_bites)
 			return ret;
 	}
@@ -82,7 +83,8 @@ uint32_t get_full_rtc(void){
 	ATOMIC_BLOCK(ATOMIC_FORCEON) {
 		((uint16_t *)&ret)[1] = high_bites;
 		tmp = get_rtc();
-		((uint16_t *)&ret)[0] = tmp;
+		((uint8_t *)&ret)[0] = (uint8_t)tmp;
+		((uint8_t *)&ret)[1] = ((uint8_t *)&tmp)[1];
 	}
 
 	return ret;
