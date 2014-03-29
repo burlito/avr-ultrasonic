@@ -29,6 +29,12 @@
 	this is place for define or include
 	definition of F_CPU and RTC_PRESCALER 
 */
+/**
+	F_CPU is used for computinf purporses
+
+	RTC_PRESCALER will setup RTC prescaling int TC1
+		allowed values are 1, 64, 256, 1024
+*/
 
 #ifndef F_CPU
 #	define F_CPU 8000000UL
