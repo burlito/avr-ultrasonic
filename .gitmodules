@@ -1,0 +1,3 @@
+[submodule "src/rtc"]
+	path = src/rtc
+	url = git@github.com:burlito/rtc-328p.git
