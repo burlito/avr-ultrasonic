@@ -46,10 +46,16 @@ int main(void)
 	xfunc_out = USARTWriteChar;
 
 	USARTInit(12);
+	DDRC &= ~_BV(PORTC2);
 	rtc_init();
 	while (1) {
-		/* _delay_ms(25); */
-		xprintf(PSTR("n: %d,t: %lu\n"), b_messure(), get_rtc_ms());
+		if (PINC & _BV(PINC2)) {
+			/* _delay_ms(25); */
+			xprintf(PSTR("n: %d,t: %lu\n"),
+				b_messure(), get_rtc_ms());
+			while (PINC & _BV(PINC2))
+				;
+		}
 	}
 
 	/*this should be unreachable*/
