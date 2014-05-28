@@ -23,7 +23,7 @@ void xputc(char chr);
 
 
 /*-----------------------------------------------------------------------------*/
-void xputs(const prog_char *string);
+void xputs(const char *string);
 
 /*  The string placed in the ROM is forwarded to xputc() directly.
 */
@@ -47,7 +47,7 @@ void xitoa(long value, char radix, char width);
 
 
 /*-----------------------------------------------------------------------------*/
-void xprintf(const prog_char *format, ...);
+void xprintf(const char *format, ...);
 
 /* Format string is placed in the ROM. The format flags is similar to printf().
 
